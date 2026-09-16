@@ -1,0 +1,1758 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sweet Swap</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream: #FBF3E7;
+    --cream-deep: #F3E5D0;
+    --cocoa: #4A2E1F;
+    --cocoa-soft: #8C6A52;
+    --coral: #FF6FA0;
+    --coral-deep: #E14E82;
+    --gold: #E8B84B;
+    --mint: #3FBF9A;
+    --panel: #FFFBF6;
+    --panel-line: #EAD9BD;
+  }
+  *{ box-sizing: border-box; }
+  body{
+    margin:0;
+    min-height:100vh;
+    background-color: var(--cream);
+    background-image:
+      linear-gradient(to bottom, rgba(43,24,12,0.45) 0%, rgba(43,24,12,0.18) 22%, rgba(43,24,12,0.32) 100%),
+      url('assets/bg_bakery.png');
+    background-size: cover, cover;
+    background-position: center, center;
+    background-repeat: no-repeat, no-repeat;
+    background-attachment: scroll, scroll;
+    color: var(--cocoa);
+    font-family: 'Nunito', system-ui, sans-serif;
+    display:flex;
+    justify-content:center;
+    padding: 20px 16px 40px;
+  }
+  .stage{
+    position:relative;
+    width:100%;
+    max-width: 620px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:14px;
+  }
+  .sprinkle{
+    position:absolute;
+    width:9px; height:20px;
+    border-radius:5px;
+    opacity:0.8;
+    animation: bob 3.2s ease-in-out infinite;
+    pointer-events:none;
+  }
+  .sprinkle.s1{ top:-6px; left:8%; background:var(--coral); animation-delay:0s; }
+  .sprinkle.s2{ top:6px; right:10%; background:var(--mint); animation-delay:0.7s; }
+  .sprinkle.s3{ top:58px; left:2%; width:7px; height:15px; background:var(--gold); animation-delay:1.4s; }
+  .sprinkle.s4{ top:52px; right:3%; width:7px; height:15px; background:#C471ED; animation-delay:2.1s; }
+  @keyframes bob{
+    0%,100%{ transform: translateY(0); }
+    50%{ transform: translateY(-7px); }
+  }
+  h1{
+    font-family:'Fredoka', system-ui, sans-serif;
+    font-weight:700;
+    font-size: clamp(28px, 7vw, 36px);
+    color: var(--coral-deep);
+    text-shadow: 0 2px 0 #fff, 0 4px 0 rgba(74,46,31,0.18);
+    margin: 6px 0 0;
+    text-wrap: balance;
+    letter-spacing: 0.5px;
+  }
+  .tagline{
+    margin: -8px 0 0;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--cocoa-soft);
+    letter-spacing: 0.4px;
+  }
+  .hud{
+    width:100%;
+    display:flex;
+    align-items:stretch;
+    gap:10px;
+  }
+  .stat{
+    flex:1;
+    background: var(--panel);
+    border: 2px solid var(--panel-line);
+    border-radius: 16px;
+    padding: 8px 14px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    box-shadow: 0 3px 0 var(--panel-line);
+  }
+  .stat .label{
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--cocoa-soft);
+  }
+  .stat .value{
+    font-family:'Fredoka', system-ui, sans-serif;
+    font-size: 22px;
+    font-weight:600;
+    color: var(--cocoa);
+    font-variant-numeric: tabular-nums;
+  }
+  .stat .subval{
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--cocoa-soft);
+    margin-top: -2px;
+  }
+  #menuBtn:focus-visible, .stat:focus-visible, #muteBtn:focus-visible{
+    outline: 3px solid var(--mint);
+    outline-offset: 2px;
+  }
+  #menuBtn{
+    flex: 0 0 auto;
+    align-self:center;
+    background: var(--panel);
+    color: var(--cocoa);
+    border: 2px solid var(--panel-line);
+    border-radius: 16px;
+    width: 44px;
+    font-size:18px;
+    line-height:1;
+    box-shadow: 0 3px 0 var(--panel-line);
+    cursor:pointer;
+  }
+  #menuBtn:active{
+    transform: translateY(2px);
+    box-shadow: 0 1px 0 var(--panel-line);
+  }
+  #muteBtn{
+    flex: 0 0 auto;
+    align-self:center;
+    background: var(--panel);
+    color: var(--cocoa);
+    border: 2px solid var(--panel-line);
+    border-radius: 16px;
+    width: 44px;
+    font-size:18px;
+    line-height:1;
+    box-shadow: 0 3px 0 var(--panel-line);
+    cursor:pointer;
+  }
+  #muteBtn:active{
+    transform: translateY(2px);
+    box-shadow: 0 1px 0 var(--panel-line);
+  }
+  #muteBtn[aria-pressed="true"]{
+    opacity:0.6;
+  }
+  .board-frame{
+    position:relative;
+    width:100%;
+    background: var(--panel);
+    border: 2px solid var(--panel-line);
+    border-radius: 20px;
+    padding: 8px;
+    box-shadow: 0 6px 0 var(--panel-line), 0 10px 24px rgba(74,46,31,0.12);
+  }
+  .overlay{
+    position:absolute;
+    inset:0;
+    background: rgba(43,24,12,0.55);
+    border-radius: 20px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding: 14px;
+    z-index: 20;
+  }
+  .overlay[hidden]{ display:none; }
+  .overlay .panel{
+    width:100%;
+    max-width: 380px;
+    max-height: 100%;
+    overflow-y:auto;
+    background: var(--panel);
+    border: 2px solid var(--panel-line);
+    border-radius: 18px;
+    padding: 18px 16px;
+    box-shadow: 0 6px 0 var(--panel-line), 0 10px 24px rgba(74,46,31,0.25);
+    text-align:center;
+  }
+  .overlay h2{
+    font-family:'Fredoka', system-ui, sans-serif;
+    font-size: 20px;
+    color: var(--coral-deep);
+    margin: 0 0 12px;
+  }
+  .level-grid{
+    display:grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+  }
+  .level-btn{
+    position:relative;
+    aspect-ratio: 1;
+    border-radius: 12px;
+    border: 2px solid var(--panel-line);
+    background: var(--cream);
+    font-family:'Fredoka', system-ui, sans-serif;
+    font-weight:600;
+    font-size: 16px;
+    color: var(--cocoa);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    box-shadow: 0 2px 0 var(--panel-line);
+  }
+  .level-btn:active{ transform: translateY(1px); box-shadow:none; }
+  .level-btn.locked{
+    background: var(--cream-deep);
+    color: var(--cocoa-soft);
+    opacity: 0.55;
+    cursor: default;
+  }
+  .level-btn .stars{
+    font-size: 8px;
+    letter-spacing: 1px;
+    margin-top: 1px;
+    color: var(--gold);
+  }
+  .result-stars{
+    font-size: 34px;
+    letter-spacing: 6px;
+    margin: 4px 0 10px;
+    color: var(--gold);
+  }
+  .result-detail{
+    font-size: 14px;
+    font-weight:700;
+    color: var(--cocoa-soft);
+    margin-bottom: 14px;
+  }
+  .btn-row{
+    display:flex;
+    gap: 10px;
+    justify-content:center;
+  }
+  .btn-row button{
+    font-family:'Nunito', system-ui, sans-serif;
+    font-weight:800;
+    font-size:14px;
+    border:none;
+    border-radius: 14px;
+    padding: 10px 16px;
+    cursor:pointer;
+  }
+  .btn-primary{
+    background: var(--coral);
+    color:#fff;
+    box-shadow: 0 3px 0 var(--coral-deep);
+  }
+  .btn-secondary{
+    background: var(--panel);
+    color: var(--cocoa);
+    border: 2px solid var(--panel-line);
+    box-shadow: 0 3px 0 var(--panel-line);
+  }
+  .btn-row button:active{ transform: translateY(2px); box-shadow:none; }
+  #phaser-container{
+    width:100%;
+    line-height:0;
+    border-radius: 14px;
+    overflow:hidden;
+  }
+  #phaser-container canvas{
+    width:100% !important;
+    height:auto !important;
+    display:block;
+  }
+  .hint{
+    font-size: 13px;
+    color: var(--cocoa-soft);
+    font-weight: 700;
+    text-align:center;
+    line-height:1.5;
+  }
+  .hint .sub{
+    font-size: 11.5px;
+    font-weight: 700;
+    opacity: 0.85;
+  }
+  @media (prefers-reduced-motion: reduce){
+    * { animation-duration: 0.001ms !important; }
+  }
+</style>
+
+<div class="stage">
+  <div class="sprinkle s1" aria-hidden="true"></div>
+  <div class="sprinkle s2" aria-hidden="true"></div>
+  <div class="sprinkle s3" aria-hidden="true"></div>
+  <div class="sprinkle s4" aria-hidden="true"></div>
+  <h1>Sweet Swap</h1>
+  <div class="tagline">match the treats, chain the combos</div>
+  <div class="hud">
+    <div class="stat"><span class="label">Level</span><span class="value" id="levelVal">1</span></div>
+    <div class="stat"><span class="label">Moves</span><span class="value" id="movesVal">0</span></div>
+    <div class="stat"><span class="label">Score</span><span class="value" id="scoreVal">0</span><span class="subval" id="targetVal"></span></div>
+    <button id="muteBtn" type="button" aria-label="Mute sound" aria-pressed="false">🔊</button>
+    <button id="menuBtn" type="button" aria-label="Level menu">☰</button>
+  </div>
+  <div class="board-frame">
+    <div id="phaser-container"></div>
+    <div id="levelSelectOverlay" class="overlay">
+      <div class="panel">
+        <h2>Select a Level</h2>
+        <div id="levelGrid" class="level-grid"></div>
+      </div>
+    </div>
+    <div id="resultOverlay" class="overlay" hidden>
+      <div class="panel">
+        <h2 id="resultTitle">Level Complete!</h2>
+        <div class="result-stars" id="resultStars"></div>
+        <div class="result-detail" id="resultDetail"></div>
+        <div class="btn-row">
+          <button id="resultPrimaryBtn" class="btn-primary" type="button">Next Level</button>
+          <button id="resultMenuBtn" class="btn-secondary" type="button">Level Select</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="hint">
+    Swipe a treat toward a neighbor to swap
+    <div class="sub">4 in a row = striped treat &nbsp;·&nbsp; 5 in a row = sugar bomb</div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/3.70.0/phaser.min.js"></script>
+<script>
+(function(){
+  "use strict";
+
+  var COLS = 8, ROWS = 8, CELL = 68;
+  var BOARD_W = COLS*CELL, BOARD_H = ROWS*CELL;
+  var GAME_W = BOARD_W + 24;
+  var BOARD_X = Math.round((GAME_W - BOARD_W)/2);
+  var BOARD_Y = 0;
+  var GAME_H = BOARD_H;
+
+  var PIECE_TYPES = ['cupcake','cookie','donut','muffin','pie','cake'];
+  var PARTICLE_COLORS = [0xFF6FA0, 0xC98A4B, 0xC471ED, 0x5B7FE0, 0xE8632A, 0xFFB8D9];
+
+  var dataGrid = [], spriteGrid = [], specialGrid = [];
+  var S = null; // active scene reference
+  var dragging = null; // {r,c,sprite,startX,startY,moved} while a swipe is in progress
+  var SWIPE_THRESHOLD_FRAC = 0.28; // fraction of CELL a drag must travel to register as a swipe
+  var selectorRing = null;
+  var gameState = 'idle';
+  var comboCount = 0;
+  var score = 0;
+  var scoreText, movesText, levelText, targetText;
+  var comboPopup;
+  var pendingBombTriggers = [];
+  var idleTimer = null;
+  var hintCells = null;
+  var hintTweens = [];
+  var HINT_DELAY = 10000;
+
+  // ---------- levels & progress ----------
+  var MAX_LEVELS = 30;
+  var PROGRESS_KEY = 'sweetSwapProgress';
+  var currentLevel = 1;
+  var movesLeft = 0;
+  var levelTarget = 0;
+  var levelActive = false;
+
+  function loadProgress(){
+    try {
+      var raw = localStorage.getItem(PROGRESS_KEY);
+      if (raw){
+        var p = JSON.parse(raw);
+        if (p && typeof p.unlocked === 'number') return { unlocked: p.unlocked, stars: p.stars || {} };
+      }
+    } catch(e){ /* ignore */ }
+    return { unlocked: 1, stars: {} };
+  }
+  function saveProgress(){
+    try { localStorage.setItem(PROGRESS_KEY, JSON.stringify(progress)); } catch(e){ /* ignore */ }
+  }
+  var progress = loadProgress();
+
+  // Target score and move allowance scale up with level number - moves taper
+  // off every 3 levels (floor 14), target ramps faster than linear so later
+  // levels lean more on specials/combos rather than just more swaps.
+  function levelConfig(n){
+    var moves = Math.max(14, 22 - Math.floor((n-1)/3));
+    var target = Math.round(900 + (n-1)*650 + (n-1)*(n-1)*35);
+    return { level:n, moves:moves, target:target };
+  }
+  function starsForScore(target, sc){
+    if (sc >= target*1.6) return 3;
+    if (sc >= target*1.3) return 2;
+    if (sc >= target) return 1;
+    return 0;
+  }
+
+  function rnd(max){ return Phaser.Math.Between(0, max-1); }
+
+  // ---------- sound (synthesized, no audio files needed) ----------
+  var Sfx = (function(){
+    var ctx = null;
+    var muted = false;
+    try { muted = localStorage.getItem('sweetSwapMuted') === '1'; } catch(e){ /* ignore */ }
+    var noiseBuffer = null;
+
+    // ---- background music (same synthesized approach as the SFX above -
+    // no audio files, just scheduled oscillator notes, so it works in both
+    // the web artifact and the bundled Android app with zero extra assets) ----
+    var musicGain = null;
+    var musicPlaying = false;
+    var musicTimer = null;
+    var musicGen = 0;
+    var MUSIC_VOL = 0.05; // kept quiet relative to the SFX so chimes/pops stay in front
+    var MUSIC_TEMPO = 128; // bpm - a bright, bouncy bakery-pop feel
+    var MUSIC_STEP = 60 / MUSIC_TEMPO / 2; // eighth-note length, seconds
+    var MUSIC_STEPS = 32; // 4 bars of 8 eighth-notes
+    // Cheerful C-major melody, 0 = rest. Bars 1&3 rise then settle on the
+    // tonic/mediant, bars 2&4 answer with a little falling tail - a simple
+    // nursery-rhyme-like call-and-response that loops cleanly.
+    var MUSIC_MELODY = [
+      659.25,0,783.99,0,659.25,0,523.25,0,   // E5 . G5 . E5 . C5 .
+      587.33,0,659.25,0,587.33,0,0,0,        // D5 . E5 . D5 . . .
+      783.99,0,880.00,0,783.99,0,659.25,0,   // G5 . A5 . G5 . E5 .
+      587.33,0,523.25,0,587.33,0,0,0         // D5 . C5 . D5 . . .
+    ];
+    // One root note per bar (I-V-vi-IV, the classic pop progression).
+    var MUSIC_BASS = [261.63, 196.00, 220.00, 174.61]; // C4, G3, A3, F3
+
+    function getMusicGain(c){
+      if (!musicGain){
+        musicGain = c.createGain();
+        musicGain.gain.value = muted ? 0 : MUSIC_VOL;
+        musicGain.connect(c.destination);
+      }
+      return musicGain;
+    }
+
+    function musicNote(c, freq, t0, dur, type, peak){
+      var g = getMusicGain(c);
+      var osc = c.createOscillator();
+      var gain = c.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, t0);
+      gain.gain.setValueAtTime(0.0001, t0);
+      gain.gain.exponentialRampToValueAtTime(peak, t0 + Math.min(0.02, dur*0.25));
+      gain.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+      osc.connect(gain); gain.connect(g);
+      osc.start(t0); osc.stop(t0 + dur + 0.02);
+    }
+
+    // Schedules one loop's worth of notes starting at startTime (an
+    // AudioContext-clock time), then arranges for the next loop to be
+    // scheduled shortly before this one ends - a lookahead scheduler, so
+    // looping stays gapless/drift-free rather than drifting the way chained
+    // setTimeout(dur) calls would.
+    function scheduleMusicLoop(c, startTime, gen){
+      for (var i=0;i<MUSIC_STEPS;i++){
+        var f = MUSIC_MELODY[i];
+        if (f) musicNote(c, f, startTime + i*MUSIC_STEP, MUSIC_STEP*0.82, 'triangle', 1.0);
+      }
+      for (var b=0;b<4;b++){
+        musicNote(c, MUSIC_BASS[b], startTime + b*8*MUSIC_STEP, 8*MUSIC_STEP*0.85, 'sine', 0.8);
+      }
+      var nextStart = startTime + MUSIC_STEPS*MUSIC_STEP;
+      var delayMs = Math.max(0, (nextStart - c.currentTime - 0.2) * 1000);
+      musicTimer = setTimeout(function(){
+        if (gen !== musicGen || !musicPlaying) return;
+        scheduleMusicLoop(c, nextStart, gen);
+      }, delayMs);
+    }
+
+    function startMusic(){
+      var c = getCtx();
+      if (!c || musicPlaying) return;
+      if (c.state === 'suspended') c.resume();
+      musicPlaying = true;
+      musicGen++;
+      getMusicGain(c);
+      scheduleMusicLoop(c, c.currentTime + 0.05, musicGen);
+    }
+
+    function stopMusic(){
+      musicPlaying = false;
+      musicGen++; // invalidates any pending scheduleMusicLoop continuation
+      if (musicTimer){ clearTimeout(musicTimer); musicTimer = null; }
+    }
+
+    function getCtx(){
+      if (!ctx){
+        var AC = window.AudioContext || window.webkitAudioContext;
+        if (!AC) return null;
+        ctx = new AC();
+      }
+      return ctx;
+    }
+
+    // Call from any real user gesture (click/tap) - browsers keep new audio
+    // contexts suspended until one arrives.
+    function unlock(){
+      var c = getCtx();
+      if (c && c.state === 'suspended') c.resume();
+    }
+
+    function getNoiseBuffer(c){
+      if (noiseBuffer) return noiseBuffer;
+      var len = Math.floor(c.sampleRate * 0.3);
+      noiseBuffer = c.createBuffer(1, len, c.sampleRate);
+      var data = noiseBuffer.getChannelData(0);
+      for (var i=0;i<len;i++){ data[i] = Math.random()*2 - 1; }
+      return noiseBuffer;
+    }
+
+    // One short tone: frequency (optionally gliding to freq2), waveform,
+    // duration, and a quick attack/decay envelope so nothing clicks or pops.
+    function tone(opts){
+      if (muted) return;
+      var c = getCtx();
+      if (!c) return;
+      var t0 = c.currentTime + (opts.delay || 0);
+      var dur = opts.dur || 0.14;
+      var osc = c.createOscillator();
+      var gain = c.createGain();
+      osc.type = opts.type || 'sine';
+      osc.frequency.setValueAtTime(opts.freq, t0);
+      if (opts.freq2){ osc.frequency.exponentialRampToValueAtTime(Math.max(1,opts.freq2), t0+dur); }
+      var peak = (opts.gain!=null ? opts.gain : 0.18);
+      gain.gain.setValueAtTime(0.0001, t0);
+      gain.gain.exponentialRampToValueAtTime(peak, t0 + Math.min(0.02, dur*0.3));
+      gain.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+      osc.connect(gain); gain.connect(c.destination);
+      osc.start(t0); osc.stop(t0 + dur + 0.02);
+    }
+
+    // A short filtered noise burst, used for the bomb's percussive "thud".
+    function thud(opts){
+      if (muted) return;
+      var c = getCtx();
+      if (!c) return;
+      var t0 = c.currentTime + (opts.delay || 0);
+      var dur = opts.dur || 0.35;
+      var src = c.createBufferSource();
+      src.buffer = getNoiseBuffer(c);
+      var filt = c.createBiquadFilter();
+      filt.type = 'lowpass';
+      filt.frequency.setValueAtTime(opts.freq || 900, t0);
+      filt.frequency.exponentialRampToValueAtTime(80, t0+dur);
+      var gain = c.createGain();
+      gain.gain.setValueAtTime((opts.gain!=null?opts.gain:0.5), t0);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t0+dur);
+      src.connect(filt); filt.connect(gain); gain.connect(c.destination);
+      src.start(t0); src.stop(t0+dur);
+    }
+
+    return {
+      unlock: unlock,
+      isMuted: function(){ return muted; },
+      setMuted: function(v){
+        muted = v;
+        try { localStorage.setItem('sweetSwapMuted', muted ? '1' : '0'); } catch(e){ /* ignore */ }
+        if (musicGain){
+          var c = getCtx();
+          musicGain.gain.setTargetAtTime(muted ? 0 : MUSIC_VOL, c ? c.currentTime : 0, 0.08);
+        }
+      },
+      toggle: function(){ this.setMuted(!muted); return muted; },
+      startMusic: startMusic,
+      stopMusic: stopMusic,
+      isMusicPlaying: function(){ return musicPlaying; },
+
+      swap: function(){
+        tone({freq:480, freq2:620, dur:0.09, type:'sine', gain:0.14});
+      },
+      invalid: function(){
+        tone({freq:180, dur:0.11, type:'square', gain:0.09});
+        tone({freq:150, dur:0.13, type:'square', gain:0.08, delay:0.07});
+      },
+      pop: function(comboCount){
+        var n = Math.min(comboCount||1, 6);
+        var base = 480 + (n-1)*55;
+        tone({freq:base, freq2:base*1.5, dur:0.16, type:'triangle', gain:0.16});
+      },
+      special: function(){
+        [0,1,2].forEach(function(i){
+          tone({freq:620 + i*160, dur:0.16, type:'triangle', gain:0.15, delay:i*0.06});
+        });
+      },
+      boom: function(){
+        thud({freq:1200, dur:0.4, gain:0.5});
+        tone({freq:160, freq2:50, dur:0.35, type:'sine', gain:0.22});
+      },
+      whoosh: function(){
+        tone({freq:260, freq2:900, dur:0.32, type:'sine', gain:0.1});
+      },
+      click: function(){
+        tone({freq:700, dur:0.06, type:'sine', gain:0.1});
+      },
+      levelWin: function(){
+        [0,1,2,3].forEach(function(i){
+          tone({freq:520 + i*130, dur:0.18, type:'triangle', gain:0.16, delay:i*0.09});
+        });
+      },
+      levelLose: function(){
+        tone({freq:340, freq2:170, dur:0.4, type:'sawtooth', gain:0.12});
+      }
+    };
+  })();
+
+  // ---------- texture generation ----------
+  // All procedural icon drawings below are hand-coordinate to a 52x52 box,
+  // independent of the board's CELL size (which changes with grid/zoom
+  // settings). Generating at a fixed ICON_BASE and letting Phaser's
+  // setDisplaySize() scale the whole texture up to the tile keeps these
+  // icons filling their tile edge-to-edge, same as the photographic art.
+  var ICON_BASE = 52;
+  function makeIcon(scene, key, drawFn, noShadow){
+    var g = scene.add.graphics();
+    if (!noShadow){
+      g.fillStyle(0x2A160C, 0.16);
+      g.fillEllipse(27,45,30,9);
+    }
+    drawFn(g);
+    g.generateTexture(key, ICON_BASE, ICON_BASE);
+    g.destroy();
+  }
+
+  var OUTLINE = 0x2A160C;
+  var OUTLINE_W = 2.4;
+
+  function drawCupcake(g){
+    var wrap = [{x:13,y:46},{x:39,y:46},{x:35,y:30},{x:17,y:30}];
+    g.fillStyle(0xE8B67A,1);
+    g.fillPoints(wrap, true);
+    g.fillStyle(0xC98A4B,0.55);
+    g.fillPoints([{x:26,y:46},{x:39,y:46},{x:35,y:30},{x:26,y:30}], true);
+    g.fillStyle(0xFFE1B0,0.5);
+    g.fillPoints([{x:13,y:46},{x:20,y:46},{x:19,y:30},{x:17,y:30}], true);
+    g.lineStyle(OUTLINE_W,OUTLINE,1);
+    g.strokePoints(wrap, true);
+    g.lineStyle(1.4,0xB87A3E,0.7);
+    g.strokeLineShape(new Phaser.Geom.Line(22,45,23,31));
+    g.strokeLineShape(new Phaser.Geom.Line(30,45,29,31));
+
+    g.fillStyle(0xFF77AC,1);
+    g.fillCircle(26,21,13);
+    g.fillCircle(26,11,7);
+    g.fillStyle(0xD9407A,0.4);
+    g.fillCircle(31,25,9);
+    g.fillCircle(29,13,4.5);
+    g.lineStyle(OUTLINE_W,OUTLINE,1);
+    g.strokeCircle(26,21,13);
+    g.strokeCircle(26,11,7);
+    g.fillStyle(0xFFFFFF,0.55);
+    g.fillCircle(21,16,5);
+    g.fillStyle(0xFFFFFF,0.85);
+    g.fillCircle(23,9,2.4);
+
+    g.fillStyle(0xE23B5C,1);
+    g.fillCircle(26,5,2.8);
+    g.lineStyle(1.4,OUTLINE,1);
+    g.strokeCircle(26,5,2.8);
+    g.fillStyle(0xFFFFFF,0.8);
+    g.fillCircle(25,4,0.8);
+  }
+
+  function drawCookie(g){
+    g.fillStyle(0xD9A050,1);
+    g.fillCircle(26,26,20);
+    g.fillStyle(0xB5793A,0.5);
+    g.fillCircle(31,31,12);
+    g.lineStyle(OUTLINE_W,OUTLINE,1);
+    g.strokeCircle(26,26,20);
+    g.fillStyle(0xFFFFFF,0.3);
+    g.fillCircle(19,18,10);
+    g.fillStyle(0xFFFFFF,0.6);
+    g.fillCircle(17,15,3.6);
+
+    var chips = [[18,19],[33,17],[19,32],[33,31],[26,24],[24,15]];
+    for (var i=0;i<chips.length;i++){
+      g.fillStyle(0x4A2E1A,1);
+      g.fillCircle(chips[i][0],chips[i][1],2.5);
+      g.lineStyle(1,OUTLINE,0.6);
+      g.strokeCircle(chips[i][0],chips[i][1],2.5);
+      g.fillStyle(0xFFFFFF,0.5);
+      g.fillCircle(chips[i][0]-0.8,chips[i][1]-0.8,0.7);
+    }
+  }
+
+  function drawDonut(g){
+    g.fillStyle(0xD675EE,1);
+    g.fillCircle(26,26,20);
+    g.fillStyle(0x9A4FC2,0.4);
+    g.fillCircle(31,31,11);
+    g.lineStyle(OUTLINE_W,OUTLINE,1);
+    g.strokeCircle(26,26,20);
+    g.fillStyle(0xFFFFFF,0.35);
+    g.fillCircle(19,18,9);
+    g.fillStyle(0xFFFFFF,0.65);
+    g.fillCircle(17,15,3);
+
+    g.fillStyle(0x8B4FB0,1);
+    g.fillCircle(26,26,7);
+    g.lineStyle(1.8,OUTLINE,1);
+    g.strokeCircle(26,26,7);
+
+    g.lineStyle(2.2,0xFFFFFF,0.85);
+    g.strokeLineShape(new Phaser.Geom.Line(12,16,20,22));
+    g.strokeLineShape(new Phaser.Geom.Line(20,12,29,19));
+    g.strokeLineShape(new Phaser.Geom.Line(30,10,39,17));
+    var sp = [[14,28,0xFFD84D],[38,14,0x3FBF9A],[36,34,0xFFFFFF],[15,38,0xFF6FA0]];
+    for (var i=0;i<sp.length;i++){
+      g.fillStyle(sp[i][2],1);
+      g.fillRect(sp[i][0]-3,sp[i][1]-1,6,2.2);
+      g.lineStyle(0.8,OUTLINE,0.5);
+      g.strokeRect(sp[i][0]-3,sp[i][1]-1,6,2.2);
+    }
+  }
+
+  function drawMuffin(g){
+    var wrap = [{x:14,y:46},{x:38,y:46},{x:35,y:32},{x:17,y:32}];
+    g.fillStyle(0xE8B67A,1);
+    g.fillPoints(wrap, true);
+    g.fillStyle(0xC98A4B,0.5);
+    g.fillPoints([{x:26,y:46},{x:38,y:46},{x:35,y:32},{x:26,y:32}], true);
+    g.lineStyle(OUTLINE_W,OUTLINE,1);
+    g.strokePoints(wrap, true);
+    g.lineStyle(1.4,0xB87A3E,0.7);
+    g.strokeLineShape(new Phaser.Geom.Line(20,45,22,33));
+    g.strokeLineShape(new Phaser.Geom.Line(32,45,30,33));
+
+    g.fillStyle(0xE8A24A,1);
+    g.fillEllipse(26,24,34,24);
+    g.fillStyle(0xC07A2E,0.4);
+    g.fillEllipse(32,30,17,13);
+    g.lineStyle(OUTLINE_W,OUTLINE,1);
+    g.strokeEllipse(26,24,34,24);
+    g.fillStyle(0xFFFFFF,0.5);
+    g.fillEllipse(19,17,14,9);
+    g.fillStyle(0xFFFFFF,0.85);
+    g.fillCircle(17,15,2.4);
+    g.lineStyle(2,0xF6C888,0.9);
+    g.beginPath();
+    g.arc(26,22,13,Phaser.Math.DegToRad(200),Phaser.Math.DegToRad(340));
+    g.strokePath();
+
+    var bb = [[19,20],[31,19],[24,27],[33,25]];
+    for (var i=0;i<bb.length;i++){
+      g.fillStyle(0x2E4FA3,1);
+      g.fillCircle(bb[i][0],bb[i][1],2.3);
+      g.lineStyle(1,0x14224A,0.7);
+      g.strokeCircle(bb[i][0],bb[i][1],2.3);
+      g.fillStyle(0x88A6F2,0.8);
+      g.fillCircle(bb[i][0]-0.7,bb[i][1]-0.7,0.6);
+    }
+  }
+
+  function drawPie(g){
+    var pts = [{x:26,y:47},{x:9,y:16},{x:43,y:16}];
+    g.fillStyle(0xFF7A42,1);
+    g.fillPoints(pts, true);
+    g.fillStyle(0xD9531E,0.4);
+    g.fillPoints([{x:26,y:47},{x:26,y:16},{x:43,y:16}], true);
+    g.fillStyle(0xFFB27A,0.4);
+    g.fillPoints([{x:26,y:47},{x:9,y:16},{x:20,y:16}], true);
+    g.lineStyle(OUTLINE_W,OUTLINE,1);
+    g.strokePoints(pts, true);
+
+    g.lineStyle(4.5,0xE8B84B,1);
+    g.strokeLineShape(new Phaser.Geom.Line(9,16,43,16));
+    g.lineStyle(2,0xFFDA96,0.9);
+    g.strokeLineShape(new Phaser.Geom.Line(11,14.5,41,14.5));
+    g.lineStyle(OUTLINE_W,OUTLINE,1);
+    g.strokeLineShape(new Phaser.Geom.Line(9,16,43,16));
+
+    g.lineStyle(2,0xF3D18A,0.9);
+    g.strokeLineShape(new Phaser.Geom.Line(18,23,33,30));
+    g.strokeLineShape(new Phaser.Geom.Line(33,23,18,30));
+    g.lineStyle(1,OUTLINE,0.35);
+    g.strokeLineShape(new Phaser.Geom.Line(18,23,33,30));
+    g.strokeLineShape(new Phaser.Geom.Line(33,23,18,30));
+  }
+
+  function drawCake(g){
+    var pts = [{x:26,y:47},{x:9,y:19},{x:43,y:19}];
+    g.fillStyle(0xFF95C4,1);
+    g.fillPoints(pts, true);
+    g.fillStyle(0xE888B0,0.5);
+    g.fillPoints([{x:26,y:47},{x:26,y:19},{x:43,y:19}], true);
+    g.fillStyle(0xFFD3E8,0.45);
+    g.fillPoints([{x:26,y:47},{x:9,y:19},{x:22,y:19}], true);
+    g.lineStyle(OUTLINE_W,OUTLINE,1);
+    g.strokePoints(pts, true);
+    g.lineStyle(2,0xE888B0,0.9);
+    g.strokeLineShape(new Phaser.Geom.Line(19,33,33,33));
+
+    g.fillStyle(0xFFFFFF,1);
+    g.fillCircle(16,19,5);
+    g.fillCircle(26,16,6);
+    g.fillCircle(36,19,5);
+    g.lineStyle(1.6,OUTLINE,1);
+    g.strokeCircle(16,19,5);
+    g.strokeCircle(26,16,6);
+    g.strokeCircle(36,19,5);
+    g.fillStyle(0xEAF4FF,0.8);
+    g.fillCircle(15,18,1.6);
+    g.fillCircle(25,15,1.8);
+
+    g.fillStyle(0xE23B5C,1);
+    g.fillCircle(26,13,2.4);
+    g.lineStyle(1.2,OUTLINE,1);
+    g.strokeCircle(26,13,2.4);
+    g.fillStyle(0xFFFFFF,0.8);
+    g.fillCircle(25,12,0.7);
+  }
+
+  function drawStripes(g, horizontal){
+    g.fillStyle(0xFFFFFF, 0.55);
+    if (horizontal){ g.fillRect(2,19,48,5); g.fillRect(2,29,48,5); }
+    else { g.fillRect(19,2,5,48); g.fillRect(29,2,5,48); }
+    g.fillStyle(0xFFD84D, 0.9);
+    if (horizontal){ g.fillRect(2,23,48,3); } else { g.fillRect(23,2,3,48); }
+  }
+
+  function drawBomb(g){
+    // A round rainbow "sugar bomb" candy: concentric gumball rings with a
+    // dark outline on each band so it reads clearly at a glance, plus one
+    // shine highlight (matching the highlight style used on the other
+    // treats) instead of a ring of dots, which was reading as UFO lights.
+    var colors = [0xFF6FA0,0xFFD84D,0x3FBF9A,0x5B7FE0,0xC471ED];
+    var r0 = 22;
+    for (var i=0;i<colors.length;i++){
+      g.fillStyle(colors[i],1);
+      g.fillCircle(26,26, r0 - i*4);
+    }
+    g.lineStyle(OUTLINE_W,OUTLINE,1);
+    g.strokeCircle(26,26, r0);
+    g.lineStyle(1.2,OUTLINE,0.4);
+    for (var i2=1;i2<colors.length;i2++){ g.strokeCircle(26,26, r0 - i2*4); }
+
+    g.fillStyle(0xFFFFFF,0.95);
+    g.fillCircle(26,26,3.2);
+    g.fillStyle(0xFFFFFF,0.55);
+    g.fillEllipse(19,17,11,7);
+    g.fillStyle(0xFFFFFF,0.9);
+    g.fillCircle(17,15,2.4);
+  }
+
+  var ICON_DRAWERS = {
+    cupcake: drawCupcake, cookie: drawCookie, donut: drawDonut,
+    muffin: drawMuffin, pie: drawPie, cake: drawCake
+  };
+
+  // Double-headed arrow overlay for the row/column-clear specials, drawn on
+  // top of the real dessert photo (a translucent white sash for contrast
+  // against any busy photo background, plus a bold outlined gold arrow).
+  var ART_SIZE = 512;
+  function drawDoubleArrow(g, horizontal){
+    var c = ART_SIZE/2;
+    g.fillStyle(0xFFFFFF, 0.8);
+    g.lineStyle(6, OUTLINE, 0.9);
+    if (horizontal){
+      g.fillRoundedRect(16, c-46, ART_SIZE-32, 92, 46);
+      g.strokeRoundedRect(16, c-46, ART_SIZE-32, 92, 46);
+    } else {
+      g.fillRoundedRect(c-46, 16, 92, ART_SIZE-32, 46);
+      g.strokeRoundedRect(c-46, 16, 92, ART_SIZE-32, 46);
+    }
+
+    g.fillStyle(0xFFD84D,1);
+    g.lineStyle(6, OUTLINE, 1);
+    if (horizontal){
+      g.fillRect(68, c-14, ART_SIZE-136, 28);
+      g.strokeRect(68, c-14, ART_SIZE-136, 28);
+      var lh = [{x:68,y:c},{x:128,y:c-46},{x:128,y:c+46}];
+      var rh = [{x:ART_SIZE-68,y:c},{x:ART_SIZE-128,y:c-46},{x:ART_SIZE-128,y:c+46}];
+    } else {
+      g.fillRect(c-14, 68, 28, ART_SIZE-136);
+      g.strokeRect(c-14, 68, 28, ART_SIZE-136);
+      var lh = [{x:c,y:68},{x:c-46,y:128},{x:c+46,y:128}];
+      var rh = [{x:c,y:ART_SIZE-68},{x:c-46,y:ART_SIZE-128},{x:c+46,y:ART_SIZE-128}];
+    }
+    g.fillPoints(lh, true); g.strokePoints(lh, true);
+    g.fillPoints(rh, true); g.strokePoints(rh, true);
+  }
+
+  var REAL_ART_KEYS = { cupcake:'art_cupcake', cookie:'art_cookie', muffin:'art_muffin', donut:'art_donut', pie:'art_pie', cake:'art_cake' };
+
+  function makeStripedArt(scene, artKey, destKey, horizontal){
+    var rt = scene.add.renderTexture(0, 0, ART_SIZE, ART_SIZE).setVisible(false);
+    rt.draw(artKey, 0, 0);
+    var g = scene.add.graphics().setVisible(false);
+    drawDoubleArrow(g, horizontal);
+    rt.draw(g, 0, 0);
+    rt.saveTexture(destKey);
+    rt.destroy();
+    g.destroy();
+  }
+
+  function createTextures(scene){
+    PIECE_TYPES.forEach(function(t){ makeIcon(scene, t, ICON_DRAWERS[t]); });
+    // Row/column-clear specials: the real dessert photo with a double-headed
+    // arrow overlay (rather than a separate procedural icon), so they still
+    // read as "this treat, primed to clear a line".
+    PIECE_TYPES.forEach(function(t){
+      var artKey = REAL_ART_KEYS[t];
+      makeStripedArt(scene, artKey, t+'_lineH', true);
+      makeStripedArt(scene, artKey, t+'_lineV', false);
+    });
+    // 'bomb' special now uses real art (art_bomb, loaded in preload) instead
+    // of the procedural drawBomb icon - see textureKeyFor().
+    var g = scene.add.graphics();
+    g.fillStyle(0xFFFFFF,1);
+    g.fillCircle(6,6,6);
+    g.generateTexture('sprinkleDot', 12, 12);
+    g.destroy();
+  }
+
+  function textureKeyFor(type, special){
+    if (special==='bomb') return 'art_bomb';
+    // Guard: a stripe/base texture needs a valid dessert index. If something
+    // upstream ever hands us the bomb sentinel (-1) or an out-of-range value
+    // here, fall back to a safe piece instead of an invalid key that would
+    // render as a blank tile.
+    var safeType = (typeof type==='number' && type>=0 && type<PIECE_TYPES.length) ? type : 0;
+    if (special==='lineH') return PIECE_TYPES[safeType]+'_lineH';
+    if (special==='lineV') return PIECE_TYPES[safeType]+'_lineV';
+    var name = PIECE_TYPES[safeType];
+    if (REAL_ART_KEYS[name]) return REAL_ART_KEYS[name];
+    return name;
+  }
+
+
+  // ---------- board data ----------
+  function makeEmptySpecialGrid(){
+    var g = [];
+    for (var r=0;r<ROWS;r++) g.push(new Array(COLS).fill(null));
+    return g;
+  }
+
+  function generateInitialGrid(){
+    var grid = [];
+    for (var r=0;r<ROWS;r++){
+      grid.push([]);
+      for (var c=0;c<COLS;c++){
+        var val, tries = 0;
+        do {
+          val = rnd(PIECE_TYPES.length);
+          tries++;
+        } while (tries < 20 && (
+          (c>=2 && grid[r][c-1]===val && grid[r][c-2]===val) ||
+          (r>=2 && grid[r-1][c]===val && grid[r-2][c]===val)
+        ));
+        grid[r][c] = val;
+      }
+    }
+    return grid;
+  }
+
+  // returns array of run objects: {cells:[[r,c],...], len, dir:'row'|'col', type}
+  function findRuns(grid){
+    var runs = [];
+    var r,c,runStart,curVal,prevVal,runLen,k;
+    for (r=0;r<ROWS;r++){
+      runStart = 0;
+      for (c=1;c<=COLS;c++){
+        prevVal = grid[r][c-1];
+        curVal = (c<COLS) ? grid[r][c] : null;
+        if (c<COLS && curVal===prevVal && curVal!==null && curVal>=0) continue;
+        runLen = c - runStart;
+        if (runLen>=3){
+          var cells=[]; for (k=runStart;k<c;k++) cells.push([r,k]);
+          runs.push({cells:cells, len:runLen, dir:'row', type:grid[r][runStart]});
+        }
+        runStart = c;
+      }
+    }
+    for (c=0;c<COLS;c++){
+      runStart = 0;
+      for (r=1;r<=ROWS;r++){
+        prevVal = grid[r-1][c];
+        curVal = (r<ROWS) ? grid[r][c] : null;
+        if (r<ROWS && curVal===prevVal && curVal!==null && curVal>=0) continue;
+        runLen = r - runStart;
+        if (runLen>=3){
+          var cells2=[]; for (k=runStart;k<r;k++) cells2.push([k,c]);
+          runs.push({cells:cells2, len:runLen, dir:'col', type:grid[runStart][c]});
+        }
+        runStart = r;
+      }
+    }
+    return runs;
+  }
+
+  function hasAnyMatch(grid){ return findRuns(grid).length>0; }
+
+  function mostCommonType(){
+    var counts = new Array(PIECE_TYPES.length).fill(0);
+    for (var r=0;r<ROWS;r++) for (var c=0;c<COLS;c++){
+      var v = dataGrid[r][c];
+      if (v!==null && v>=0) counts[v]++;
+    }
+    var best2=-1, bestCount=-1;
+    for (var i=0;i<counts.length;i++){ if (counts[i]>bestCount){ bestCount=counts[i]; best2=i; } }
+    return best2;
+  }
+
+  function hasPossibleMoves(){
+    for (var r0=0;r0<ROWS;r0++) for (var c0=0;c0<COLS;c0++){
+      if (specialGrid[r0][c0]==='bomb') return true;
+    }
+    for (var r=0;r<ROWS;r++){
+      for (var c=0;c<COLS;c++){
+        if (c<COLS-1){
+          var a = dataGrid[r][c], b = dataGrid[r][c+1];
+          dataGrid[r][c]=b; dataGrid[r][c+1]=a;
+          var m1 = hasAnyMatch(dataGrid);
+          dataGrid[r][c]=a; dataGrid[r][c+1]=b;
+          if (m1) return true;
+        }
+        if (r<ROWS-1){
+          var a2 = dataGrid[r][c], b2 = dataGrid[r+1][c];
+          dataGrid[r][c]=b2; dataGrid[r+1][c]=a2;
+          var m2 = hasAnyMatch(dataGrid);
+          dataGrid[r][c]=a2; dataGrid[r+1][c]=b2;
+          if (m2) return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  function findHintMove(){
+    for (var r=0;r<ROWS;r++){
+      for (var c=0;c<COLS;c++){
+        if (specialGrid[r][c]==='bomb'){
+          if (c<COLS-1) return {r1:r,c1:c,r2:r,c2:c+1};
+          if (r<ROWS-1) return {r1:r,c1:c,r2:r+1,c2:c};
+        }
+        if (c<COLS-1){
+          var a=dataGrid[r][c], b=dataGrid[r][c+1];
+          dataGrid[r][c]=b; dataGrid[r][c+1]=a;
+          var m1=hasAnyMatch(dataGrid);
+          dataGrid[r][c]=a; dataGrid[r][c+1]=b;
+          if (m1) return {r1:r,c1:c,r2:r,c2:c+1};
+        }
+        if (r<ROWS-1){
+          var a2=dataGrid[r][c], b2=dataGrid[r+1][c];
+          dataGrid[r][c]=b2; dataGrid[r+1][c]=a2;
+          var m2=hasAnyMatch(dataGrid);
+          dataGrid[r][c]=a2; dataGrid[r+1][c]=b2;
+          if (m2) return {r1:r,c1:c,r2:r+1,c2:c};
+        }
+      }
+    }
+    return null;
+  }
+
+  var hintSprites = null;
+
+  function clearHint(){
+    if (hintTweens && hintTweens.length){
+      hintTweens.forEach(function(tw){ tw.stop(); });
+    }
+    // Reset alpha on the exact sprites we tweened, not whatever currently
+    // occupies their old grid coordinates - a cascade can shift pieces
+    // between the hint starting and being cleared, and setting alpha on the
+    // wrong (unrelated) sprite is itself a way to leave one looking broken.
+    if (hintSprites){
+      if (hintSprites[0] && hintSprites[0].active) hintSprites[0].setAlpha(1);
+      if (hintSprites[1] && hintSprites[1].active) hintSprites[1].setAlpha(1);
+    }
+    hintTweens = [];
+    hintCells = null;
+    hintSprites = null;
+  }
+
+  function showHint(){
+    idleTimer = null;
+    if (gameState!=='idle'){ resetIdleTimer(); return; }
+    var move = findHintMove();
+    if (!move) return;
+    hintCells = move;
+    var s1 = spriteGrid[move.r1][move.c1], s2 = spriteGrid[move.r2][move.c2];
+    hintSprites = [s1, s2];
+    hintTweens = [
+      S.tweens.add({targets:s1, alpha:{from:1,to:0.5}, yoyo:true, repeat:-1, duration:500, ease:'Sine.easeInOut'}),
+      S.tweens.add({targets:s2, alpha:{from:1,to:0.5}, yoyo:true, repeat:-1, duration:500, ease:'Sine.easeInOut', delay:150})
+    ];
+  }
+
+  function resetIdleTimer(){
+    clearHint();
+    if (idleTimer){ idleTimer.remove(false); idleTimer=null; }
+    if (!S) return;
+    idleTimer = S.time.delayedCall(HINT_DELAY, showHint);
+  }
+
+  // ---------- rendering ----------
+  function cellX(c){ return BOARD_X + c*CELL + CELL/2; }
+  function cellY(r){ return BOARD_Y + r*CELL + CELL/2; }
+
+  function buildBoardSprites(scene, animateIn){
+    for (var r=0;r<ROWS;r++){
+      spriteGrid.push([]);
+      for (var c=0;c<COLS;c++){
+        var val = dataGrid[r][c];
+        var finalY = cellY(r);
+        var startY = animateIn ? (BOARD_Y - CELL*2 - r*4) : finalY;
+        var spr = scene.add.image(cellX(c), startY, textureKeyFor(val, specialGrid[r][c])).setDisplaySize(CELL-2, CELL-2).setInteractive({useHandCursor:true});
+        spr.setData('row',r); spr.setData('col',c);
+        spr.on('pointerdown', (function(sp){ return function(){ onPieceDown(sp); }; })(spr));
+        spriteGrid[r].push(spr);
+        if (animateIn){
+          scene.tweens.add({targets:spr, y:finalY, duration:420, delay:(r*COLS+c)*9, ease:'Bounce.easeOut'});
+        }
+      }
+    }
+  }
+
+  function highlightSelect(sprite,on){
+    if (!selectorRing) return;
+    if (on){
+      selectorRing.setPosition(sprite.x, sprite.y).setVisible(true).setScale(1);
+      S.tweens.killTweensOf(selectorRing);
+      S.tweens.add({targets:selectorRing, scaleX:1.12, scaleY:1.12, yoyo:true, repeat:-1, duration:420, ease:'Sine.easeInOut'});
+    } else {
+      S.tweens.killTweensOf(selectorRing);
+      selectorRing.setVisible(false);
+    }
+  }
+
+  // Swipe-to-swap: press a piece, drag toward a neighbor past a small
+  // threshold, and it swaps with that neighbor - no second tap required.
+  // pointerdown starts tracking (per-sprite); the actual drag distance is
+  // watched by scene-wide pointermove/pointerup handlers (set up in create())
+  // since a real swipe gesture usually leaves the original sprite's hit area.
+  function onPieceDown(sprite){
+    Sfx.unlock();
+    Sfx.startMusic();
+    if (gameState!=='idle') return;
+    resetIdleTimer();
+    var p = S.input.activePointer;
+    dragging = {
+      r: sprite.getData('row'), c: sprite.getData('col'),
+      sprite: sprite, startX: p.x, startY: p.y, moved: false
+    };
+    highlightSelect(sprite, true);
+  }
+
+  function onPointerMove(pointer){
+    if (!dragging || dragging.moved) return;
+    var dx = pointer.x - dragging.startX;
+    var dy = pointer.y - dragging.startY;
+    var absX = Math.abs(dx), absY = Math.abs(dy);
+    var threshold = CELL * SWIPE_THRESHOLD_FRAC;
+    if (Math.max(absX, absY) < threshold) return;
+
+    dragging.moved = true;
+    var r1 = dragging.r, c1 = dragging.c;
+    var dr = 0, dc = 0;
+    if (absX > absY) dc = dx > 0 ? 1 : -1;
+    else dr = dy > 0 ? 1 : -1;
+    var r2 = r1 + dr, c2 = c1 + dc;
+
+    highlightSelect(dragging.sprite, false);
+    dragging = null;
+    if (r2>=0 && r2<ROWS && c2>=0 && c2<COLS){
+      trySwap(r1, c1, r2, c2);
+    }
+  }
+
+  function onPointerUp(){
+    if (dragging){ highlightSelect(dragging.sprite, false); dragging = null; }
+  }
+
+  function trySwap(r1,c1,r2,c2){
+    gameState = 'animating';
+    Sfx.swap();
+    var s1 = spriteGrid[r1][c1], s2 = spriteGrid[r2][c2];
+    var x1=s1.x,y1=s1.y,x2=s2.x,y2=s2.y;
+    var done = 0;
+    function swapState(){
+      var tmp = dataGrid[r1][c1]; dataGrid[r1][c1]=dataGrid[r2][c2]; dataGrid[r2][c2]=tmp;
+      var tmpSp = specialGrid[r1][c1]; specialGrid[r1][c1]=specialGrid[r2][c2]; specialGrid[r2][c2]=tmpSp;
+      var tmpS = spriteGrid[r1][c1]; spriteGrid[r1][c1]=spriteGrid[r2][c2]; spriteGrid[r2][c2]=tmpS;
+      spriteGrid[r1][c1].setData('row',r1).setData('col',c1);
+      spriteGrid[r2][c2].setData('row',r2).setData('col',c2);
+    }
+    function afterBoth(){
+      done++;
+      if (done<2) return;
+      swapState();
+      var sp1 = specialGrid[r1][c1], sp2 = specialGrid[r2][c2];
+      var runs = findRuns(dataGrid);
+      var isBombSwap = (sp1==='bomb' || sp2==='bomb');
+
+      if (runs.length>0 || isBombSwap){
+        comboCount = 0;
+        pendingBombTriggers = [];
+        movesLeft = Math.max(0, movesLeft-1);
+        updateMovesText();
+        if (sp1==='bomb'){
+          var t2 = (sp2==='bomb') ? -2 : dataGrid[r2][c2];
+          pendingBombTriggers.push({r:r1,c:c1, targetType:t2});
+        }
+        if (sp2==='bomb'){
+          var t1 = (sp1==='bomb') ? -2 : dataGrid[r1][c1];
+          pendingBombTriggers.push({r:r2,c:c2, targetType:t1});
+        }
+        resolveMatches();
+      } else {
+        Sfx.invalid();
+        swapState();
+        S.tweens.add({targets:s1,x:x1,y:y1,duration:150,ease:'Sine.easeInOut'});
+        S.tweens.add({targets:s2,x:x2,y:y2,duration:150,ease:'Sine.easeInOut', onComplete:function(){ gameState='idle'; resetIdleTimer(); }});
+        // A quick "nope" wobble on both pieces, paired with the buzz sound.
+        [s1,s2].forEach(function(spr){
+          spr.angle = 0;
+          S.tweens.add({targets:spr, angle:{from:-8,to:8}, duration:60, yoyo:true, repeat:2,
+            onComplete:function(){ spr.angle=0; }});
+        });
+      }
+    }
+    S.tweens.add({targets:s1,x:x2,y:y2,duration:150,ease:'Sine.easeInOut', onComplete:afterBoth});
+    S.tweens.add({targets:s2,x:x1,y:y1,duration:150,ease:'Sine.easeInOut', onComplete:afterBoth});
+  }
+
+  function comboLabel(n){
+    var labels = {2:'Tasty!',3:'Delicious!',4:'Scrumptious!'};
+    return (labels[n] || 'SUGAR RUSH!') + '  x' + n;
+  }
+
+  function showComboText(text){
+    comboPopup.setText(text);
+    comboPopup.setAlpha(1);
+    comboPopup.setScale(0.7);
+    comboPopup.setPosition(GAME_W/2, BOARD_Y + BOARD_H/2 - 30);
+    S.tweens.killTweensOf(comboPopup);
+    S.tweens.add({targets:comboPopup, scale:1, duration:180, ease:'Back.easeOut'});
+    S.tweens.add({targets:comboPopup, alpha:0, y:comboPopup.y-30, duration:500, delay:450, ease:'Cubic.easeIn'});
+  }
+
+  function spawnBurst(x,y,typeIndex){
+    var idx = (typeIndex>=0 && typeIndex<PARTICLE_COLORS.length) ? typeIndex : 1;
+    var emitter = S.add.particles(x,y,'sprinkleDot',{
+      speed:{min:70,max:170},
+      angle:{min:0,max:360},
+      scale:{start:1.1,end:0},
+      lifespan:420,
+      quantity:10,
+      tint: PARTICLE_COLORS[idx]
+    });
+    S.time.delayedCall(450, function(){ emitter.destroy(); });
+  }
+
+  function updateScoreText(){
+    scoreText.setText(String(score));
+  }
+  function updateMovesText(){
+    movesText.setText(String(movesLeft));
+  }
+
+  function collapseColumn(col){
+    var survivors = [];
+    for (var r=0;r<ROWS;r++){
+      if (dataGrid[r][col]!==null){
+        survivors.push({oldRow:r, value:dataGrid[r][col], special:specialGrid[r][col], sprite:spriteGrid[r][col]});
+      }
+    }
+    var numMissing = ROWS - survivors.length;
+    var newDataCol = new Array(ROWS);
+    var newSpecialCol = new Array(ROWS);
+    var newSpriteCol = new Array(ROWS);
+
+    for (var i=0;i<numMissing;i++){
+      var newRow = i;
+      var value = rnd(PIECE_TYPES.length);
+      var x = cellX(col);
+      var startY = BOARD_Y + (i - numMissing)*CELL + CELL/2;
+      var endY = cellY(newRow);
+      var spr = S.add.image(x,startY,textureKeyFor(value,null)).setDisplaySize(CELL-2, CELL-2).setInteractive({useHandCursor:true});
+      spr.setData('row',newRow); spr.setData('col',col);
+      spr.on('pointerdown', (function(sp){ return function(){ onPieceDown(sp); }; })(spr));
+      S.tweens.add({targets:spr, y:endY, duration:320+ i*30, delay:60, ease:'Bounce.easeOut'});
+      newDataCol[newRow] = value;
+      newSpecialCol[newRow] = null;
+      newSpriteCol[newRow] = spr;
+    }
+    survivors.forEach(function(s, idx){
+      var newRow = numMissing + idx;
+      newDataCol[newRow] = s.value;
+      newSpecialCol[newRow] = s.special;
+      newSpriteCol[newRow] = s.sprite;
+      s.sprite.setData('row',newRow).setData('col',col);
+      var endY = cellY(newRow);
+      if (newRow!==s.oldRow){
+        S.tweens.add({targets:s.sprite, y:endY, duration:260, ease:'Cubic.easeIn'});
+      }
+    });
+    for (var r2=0;r2<ROWS;r2++){
+      dataGrid[r2][col] = newDataCol[r2];
+      specialGrid[r2][col] = newSpecialCol[r2];
+      spriteGrid[r2][col] = newSpriteCol[r2];
+    }
+  }
+
+  function reshuffleBoard(){
+    if (idleTimer){ idleTimer.remove(false); idleTimer=null; }
+    clearHint();
+    Sfx.whoosh();
+    for (var r=0;r<ROWS;r++){
+      for (var c=0;c<COLS;c++){
+        if (spriteGrid[r][c]) spriteGrid[r][c].destroy();
+      }
+    }
+    dataGrid = generateInitialGrid();
+    specialGrid = makeEmptySpecialGrid();
+    spriteGrid = [];
+    buildBoardSprites(S, true);
+    showComboText('Reshuffled!');
+  }
+
+  function computeClearSet(){
+    var runs = findRuns(dataGrid);
+    var cellsToClear = new Set();
+    var specialsToCreate = [];
+    runs.forEach(function(run){
+      run.cells.forEach(function(cell){ cellsToClear.add(cell[0]+','+cell[1]); });
+      if (run.len>=4){
+        var seed = run.cells[Math.floor(run.cells.length/2)];
+        specialsToCreate.push({r:seed[0], c:seed[1], len:run.len, dir:run.dir, type:run.type});
+      }
+    });
+    return {cellsToClear:cellsToClear, specialsToCreate:specialsToCreate};
+  }
+
+  // Safety net: whenever the board settles, make sure every cell has a real,
+  // correctly-textured piece. If anything ever slips through with a broken
+  // or missing sprite (a data/special mismatch we didn't anticipate), quietly
+  // replace it with a fresh valid piece instead of leaving a blank tile.
+  function repairBoard(){
+    for (var r=0;r<ROWS;r++){
+      for (var c=0;c<COLS;c++){
+        var v = dataGrid[r][c];
+        var sp = specialGrid[r][c];
+        var spr = spriteGrid[r][c];
+        var broken = false;
+
+        // repairBoard only ever runs once the board has fully settled, so by
+        // then every cell should be filled - null data, null sprite, or a
+        // mismatch between the two all count as broken.
+        if (v===null || spr===null) broken = true;
+        if (v!==null && sp!=='bomb' && (typeof v!=='number' || v<0 || v>=PIECE_TYPES.length)) broken = true;
+        if (!broken && spr && spr.texture && /undefined/.test(spr.texture.key)) broken = true;
+
+        if (!broken) continue;
+
+        var newVal = rnd(PIECE_TYPES.length);
+        dataGrid[r][c] = newVal;
+        specialGrid[r][c] = null;
+        var tex = textureKeyFor(newVal, null);
+        if (spr){
+          spr.setTexture(tex);
+        } else {
+          spr = S.add.image(cellX(c), cellY(r), tex).setDisplaySize(CELL-2, CELL-2).setInteractive({useHandCursor:true});
+          spr.setData('row',r); spr.setData('col',c);
+          spr.on('pointerdown', (function(sp2){ return function(){ onPieceDown(sp2); }; })(spr));
+          spriteGrid[r][c] = spr;
+        }
+      }
+    }
+    // Belt-and-suspenders: whatever the cause, no settled piece should ever
+    // be sitting at a leftover alpha/scale from an interrupted tween (e.g.
+    // an idle hint pulse cut short by a board reset). Snap everything back
+    // to its normal, fully-visible resting state every time things settle.
+    for (var r2=0;r2<ROWS;r2++){
+      for (var c2=0;c2<COLS;c2++){
+        var s = spriteGrid[r2][c2];
+        if (s && s.active){
+          s.setAlpha(1);
+          s.setDisplaySize(CELL-2, CELL-2);
+          s.setRotation(0);
+        }
+      }
+    }
+  }
+
+  function resolveMatches(){
+    var result = computeClearSet();
+    var cellsToClear = result.cellsToClear;
+    var specialsToCreate = result.specialsToCreate;
+    var bombDetonated = pendingBombTriggers.length>0;
+
+    if (pendingBombTriggers.length){
+      pendingBombTriggers.forEach(function(t){
+        cellsToClear.add(t.r+','+t.c);
+        if (t.targetType===-2){
+          for (var r=0;r<ROWS;r++) for (var c=0;c<COLS;c++){ if (dataGrid[r][c]!==null) cellsToClear.add(r+','+c); }
+        } else if (t.targetType>=0){
+          for (var r2=0;r2<ROWS;r2++) for (var c2=0;c2<COLS;c2++){ if (dataGrid[r2][c2]===t.targetType) cellsToClear.add(r2+','+c2); }
+        }
+      });
+      pendingBombTriggers = [];
+    }
+
+    var queue = Array.from(cellsToClear);
+    var qi = 0;
+    while (qi < queue.length){
+      var key = queue[qi++];
+      var parts = key.split(',');
+      var rr = parseInt(parts[0],10), cc = parseInt(parts[1],10);
+      var sp = specialGrid[rr][cc];
+      if (sp==='lineH'){
+        for (var c3=0;c3<COLS;c3++){ var k3=rr+','+c3; if(!cellsToClear.has(k3)){cellsToClear.add(k3); queue.push(k3);} }
+      } else if (sp==='lineV'){
+        for (var r3=0;r3<ROWS;r3++){ var k4=r3+','+cc; if(!cellsToClear.has(k4)){cellsToClear.add(k4); queue.push(k4);} }
+      } else if (sp==='bomb'){
+        var mc = mostCommonType();
+        if (mc>=0){
+          for (var r4=0;r4<ROWS;r4++) for (var c4=0;c4<COLS;c4++){
+            if (dataGrid[r4][c4]===mc){ var k5=r4+','+c4; if(!cellsToClear.has(k5)){cellsToClear.add(k5); queue.push(k5);} }
+          }
+        }
+      }
+    }
+
+    if (cellsToClear.size===0){
+      repairBoard();
+      if (!hasPossibleMoves()){
+        reshuffleBoard();
+        S.time.delayedCall(60, resolveMatches);
+        return;
+      }
+      if (checkLevelEnd()) return;
+      gameState = 'idle';
+      resetIdleTimer();
+      return;
+    }
+
+    var seedKeys = new Set(specialsToCreate.map(function(s){ return s.r+','+s.c; }));
+    seedKeys.forEach(function(k){ cellsToClear.delete(k); });
+
+    comboCount++;
+    var points = cellsToClear.size * 10 * comboCount + specialsToCreate.length*50;
+    score += points;
+    updateScoreText();
+
+    var specialMsg = null;
+    specialsToCreate.forEach(function(s){
+      if (s.len>=5) specialMsg = 'Sugar Bomb!';
+      else if (!specialMsg) specialMsg = 'Sweet Stripe!';
+    });
+    if (specialMsg) showComboText(specialMsg);
+    else if (comboCount>1) showComboText(comboLabel(comboCount));
+
+    if (specialsToCreate.length) Sfx.special();
+    else Sfx.pop(comboCount);
+
+    if (bombDetonated){
+      S.cameras.main.flash(220, 255,216,77);
+      S.cameras.main.shake(200, 0.006);
+      Sfx.boom();
+    }
+
+    cellsToClear.forEach(function(key){
+      var parts = key.split(',');
+      var r = parseInt(parts[0],10), c = parseInt(parts[1],10);
+      var spr = spriteGrid[r][c];
+      if (spr){
+        spawnBurst(spr.x, spr.y, dataGrid[r][c]);
+        S.tweens.add({targets:spr, scaleX:0, scaleY:0, alpha:0, duration:200, ease:'Back.easeIn',
+          onComplete:(function(sp){ return function(){ sp.destroy(); }; })(spr)});
+      }
+      dataGrid[r][c] = null;
+      spriteGrid[r][c] = null;
+      specialGrid[r][c] = null;
+    });
+
+    specialsToCreate.forEach(function(s){
+      var kind = (s.len>=5) ? 'bomb' : (s.dir==='row' ? 'lineH' : 'lineV');
+      var newType = (kind==='bomb') ? -1 : s.type;
+      specialGrid[s.r][s.c] = kind;
+      dataGrid[s.r][s.c] = newType;
+      var spr = spriteGrid[s.r][s.c];
+      if (spr){
+        spr.setTexture(textureKeyFor(newType, kind));
+        S.tweens.add({targets:spr, scaleX:1.3, scaleY:1.3, duration:160, yoyo:true, ease:'Sine.easeOut'});
+      }
+    });
+
+    S.time.delayedCall(230, function(){
+      for (var c=0;c<COLS;c++) collapseColumn(c);
+      S.time.delayedCall(420, resolveMatches);
+    });
+  }
+
+  // ---------- level flow ----------
+  function checkLevelEnd(){
+    if (!levelActive) return false;
+    if (score >= levelTarget){
+      levelActive = false;
+      onLevelWin();
+      return true;
+    }
+    if (movesLeft <= 0){
+      levelActive = false;
+      onLevelLose();
+      return true;
+    }
+    return false;
+  }
+
+  function onLevelWin(){
+    gameState = 'levelover';
+    if (idleTimer){ idleTimer.remove(false); idleTimer=null; }
+    clearHint();
+    Sfx.levelWin();
+    var stars = starsForScore(levelTarget, score);
+    var prevStars = progress.stars[currentLevel] || 0;
+    if (stars > prevStars) progress.stars[currentLevel] = stars;
+    if (currentLevel + 1 > progress.unlocked) progress.unlocked = currentLevel + 1;
+    saveProgress();
+    showResult(true, stars);
+  }
+
+  function onLevelLose(){
+    gameState = 'levelover';
+    if (idleTimer){ idleTimer.remove(false); idleTimer=null; }
+    clearHint();
+    Sfx.levelLose();
+    showResult(false, 0);
+  }
+
+  function showResult(won, stars){
+    var overlay = document.getElementById('resultOverlay');
+    var title = document.getElementById('resultTitle');
+    var starsEl = document.getElementById('resultStars');
+    var detail = document.getElementById('resultDetail');
+    var primaryBtn = document.getElementById('resultPrimaryBtn');
+    title.textContent = won ? 'Level Complete!' : 'Out of Moves!';
+    starsEl.textContent = won ? ('★'.repeat(stars) + '☆'.repeat(3-stars)) : '';
+    detail.textContent = 'Score ' + score + ' / ' + levelTarget;
+    primaryBtn.textContent = won ? 'Next Level' : 'Retry';
+    primaryBtn.onclick = function(){
+      Sfx.unlock(); Sfx.startMusic(); Sfx.click();
+      hideResult();
+      startLevel(won ? currentLevel + 1 : currentLevel);
+    };
+    overlay.hidden = false;
+  }
+  function hideResult(){
+    document.getElementById('resultOverlay').hidden = true;
+  }
+
+  function buildLevelGrid(){
+    var grid = document.getElementById('levelGrid');
+    grid.innerHTML = '';
+    for (var n=1; n<=MAX_LEVELS; n++){
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      var locked = n > progress.unlocked;
+      btn.className = 'level-btn' + (locked ? ' locked' : '');
+      var num = document.createElement('span');
+      num.textContent = locked ? '\u{1F512}' : String(n);
+      btn.appendChild(num);
+      if (!locked){
+        var st = progress.stars[n] || 0;
+        var starsSpan = document.createElement('span');
+        starsSpan.className = 'stars';
+        starsSpan.textContent = st>0 ? '★'.repeat(st) : '';
+        btn.appendChild(starsSpan);
+        btn.setAttribute('aria-label', 'Level ' + n + (st>0 ? (', ' + st + ' stars') : ', not yet cleared'));
+        btn.addEventListener('click', (function(lvl){ return function(){
+          Sfx.unlock(); Sfx.startMusic(); Sfx.click();
+          startLevel(lvl);
+        }; })(n));
+      } else {
+        btn.setAttribute('aria-label', 'Level ' + n + ', locked');
+      }
+      grid.appendChild(btn);
+    }
+  }
+
+  function showLevelSelect(){
+    if (idleTimer){ idleTimer.remove(false); idleTimer=null; }
+    clearHint();
+    gameState = 'levelover';
+    buildLevelGrid();
+    document.getElementById('levelSelectOverlay').hidden = false;
+  }
+  function hideLevelSelect(){
+    document.getElementById('levelSelectOverlay').hidden = true;
+  }
+
+  function startLevel(n){
+    if (n > progress.unlocked) n = progress.unlocked; // guard against skipping ahead
+    if (n > MAX_LEVELS) n = MAX_LEVELS;
+    currentLevel = n;
+    var cfg = levelConfig(n);
+    levelTarget = cfg.target;
+    movesLeft = cfg.moves;
+    levelActive = true;
+    score = 0;
+    comboCount = 0;
+    pendingBombTriggers = [];
+    levelText.setText(String(currentLevel));
+    targetText.setText('/ ' + levelTarget);
+    updateScoreText();
+    updateMovesText();
+    hideResult();
+    hideLevelSelect();
+
+    // Same teardown resetGame used to do - stop any in-flight hint pulse
+    // before tearing down sprites, otherwise that tween keeps targeting a
+    // destroyed object, which can disrupt the new board's entrance tweens.
+    if (idleTimer){ idleTimer.remove(false); idleTimer=null; }
+    clearHint();
+    Sfx.whoosh();
+    if (dragging){ highlightSelect(dragging.sprite,false); dragging=null; }
+    for (var r=0;r<ROWS;r++){
+      for (var c=0;c<COLS;c++){
+        if (spriteGrid[r] && spriteGrid[r][c]) spriteGrid[r][c].destroy();
+      }
+    }
+    dataGrid = generateInitialGrid();
+    specialGrid = makeEmptySpecialGrid();
+    spriteGrid = [];
+    buildBoardSprites(S, true);
+    gameState = 'idle';
+    resetIdleTimer();
+  }
+
+  // ---------- boot ----------
+  function start(){
+    var config = {
+      type: Phaser.AUTO,
+      width: GAME_W,
+      height: GAME_H,
+      parent: 'phaser-container',
+      backgroundColor: '#FFFBF6',
+      scale: { mode: Phaser.Scale.FIT, autoCenter: Phaser.Scale.CENTER_HORIZONTALLY },
+      scene: {
+        preload: function(){
+          this.load.image('art_cupcake', 'assets/cupcake.png');
+          this.load.image('art_cookie', 'assets/cookie.png');
+          this.load.image('art_muffin', 'assets/muffin.png');
+          this.load.image('art_donut', 'assets/donut.png');
+          this.load.image('art_pie', 'assets/pie.png');
+          this.load.image('art_cake', 'assets/cake.png');
+          this.load.image('art_bomb', 'assets/bomb.png');
+        },
+        create: function(){
+          S = this;
+          createTextures(this);
+
+          var bgG = this.add.graphics();
+          bgG.fillGradientStyle(0xFFE9D4, 0xFFDCEA, 0xFFF3E0, 0xFFD3E6, 1);
+          bgG.fillRect(0,0,GAME_W,GAME_H);
+          bgG.fillStyle(0xFFFFFF, 0.22);
+          var bokeh = [[10,30,18],[GAME_W-14,60,14],[8,GAME_H-40,16],[GAME_W-10,GAME_H-70,20],[GAME_W/2,14,12],[GAME_W/2,GAME_H-14,14]];
+          bokeh.forEach(function(b){ bgG.fillCircle(b[0],b[1],b[2]); });
+
+          var tilesG = this.add.graphics();
+          tilesG.lineStyle(1, 0xEAD9BD, 0.55);
+          for (var r=0;r<ROWS;r++){
+            for (var c=0;c<COLS;c++){
+              var shade = ((r+c)%2===0) ? 0xF9EEDA : 0xFFFAF0;
+              var tx = cellX(c)-CELL/2+2, ty = cellY(r)-CELL/2+2, tw = CELL-4, th = CELL-4;
+              tilesG.fillStyle(shade,1);
+              tilesG.fillRoundedRect(tx,ty,tw,th,10);
+              tilesG.strokeRoundedRect(tx,ty,tw,th,10);
+            }
+          }
+
+          selectorRing = this.add.circle(0,0, CELL*0.44, 0xffffff, 0);
+          selectorRing.setStrokeStyle(4, 0xE8B84B, 1);
+          selectorRing.setVisible(false);
+          selectorRing.setDepth(5);
+
+          comboPopup = this.add.text(GAME_W/2, BOARD_H/2-30, '', {
+            fontFamily: 'Fredoka, sans-serif',
+            fontSize: '26px',
+            fontStyle: '600',
+            color: '#E14E82',
+            stroke: '#FFFFFF',
+            strokeThickness: 6,
+            align: 'center'
+          }).setOrigin(0.5).setAlpha(0).setDepth(10);
+
+          // Scene-wide drag tracking for swipe-to-swap - a real swipe usually
+          // moves off the piece's own hit area, so this has to watch the
+          // pointer globally rather than per-sprite. pointerupoutside covers
+          // a release that ends up outside the game canvas entirely.
+          this.input.on('pointermove', onPointerMove);
+          this.input.on('pointerup', onPointerUp);
+          this.input.on('pointerupoutside', onPointerUp);
+
+          showLevelSelect();
+
+          document.getElementById('menuBtn').addEventListener('click', function(){
+            Sfx.unlock();
+            Sfx.startMusic();
+            Sfx.click();
+            showLevelSelect();
+          });
+          document.getElementById('resultMenuBtn').addEventListener('click', function(){
+            Sfx.unlock();
+            Sfx.startMusic();
+            Sfx.click();
+            hideResult();
+            showLevelSelect();
+          });
+
+          var muteBtn = document.getElementById('muteBtn');
+          function syncMuteBtn(){
+            var m = Sfx.isMuted();
+            muteBtn.textContent = m ? '🔇' : '🔊';
+            muteBtn.setAttribute('aria-pressed', m ? 'true' : 'false');
+            muteBtn.setAttribute('aria-label', m ? 'Unmute sound' : 'Mute sound');
+          }
+          syncMuteBtn();
+          muteBtn.addEventListener('click', function(){
+            Sfx.unlock();
+            Sfx.startMusic();
+            var nowMuted = Sfx.toggle();
+            syncMuteBtn();
+            if (!nowMuted) Sfx.click();
+          });
+        }
+      }
+    };
+
+    scoreText = { setText: function(t){ document.getElementById('scoreVal').textContent = t; } };
+    movesText = { setText: function(t){ document.getElementById('movesVal').textContent = t; } };
+    levelText = { setText: function(t){ document.getElementById('levelVal').textContent = t; } };
+    targetText = { setText: function(t){ document.getElementById('targetVal').textContent = t; } };
+
+    new Phaser.Game(config);
+  }
+
+  if (window.claude && window.claude.hot && window.claude.hot.ready){
+    window.claude.hot.ready(start);
+  } else {
+    start();
+  }
+})();
+</script>
+
+</body></html>
